@@ -11,8 +11,11 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import sys
 
+import dj_database_url
 from corsheaders.defaults import default_headers, default_methods
+from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,10 +25,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "#68y=4d)u(646!7t(psf_a!8p1!iyy1qox9_fnw0l!*=)(o0te"
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 
 # Application definition
@@ -75,20 +78,34 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "sequence_builder.wsgi.application"
 
-
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "asanas_db",
-        "USER": "postgres",
-        "PASSWORD": "ex652322",
-        "HOST": "localhost",
-        "PORT": "5432",
+if DEVELOPMENT_MODE is True:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "asanas_db",
+        }
     }
-}
+elif len(sys.argv) > 0 and sys.argv[1] != "collectstatic":
+    if os.getenv("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable not defined")
+    DATABASES = {
+        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+    }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "asanas_db",
+#         "USER": "postgres",
+#         "PASSWORD": "ex652322",
+#         "HOST": "localhost",
+#         "PORT": "5432",
+#     }
+# }
 
 
 # Password validation
@@ -153,7 +170,7 @@ CORS_ALLOW_HEADERS = [
     *default_headers,
 ]
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 # TODO whitelist
 # CORS_ORIGIN_WHITELIST = ["http://localhost:3000", "http://127.0.0.1:3000"]
