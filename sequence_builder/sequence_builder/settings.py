@@ -101,17 +101,6 @@ elif len(sys.argv) > 0 and sys.argv[1] != "collectstatic":
         "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
     }
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "asanas_db",
-#         "USER": "postgres",
-#         "PASSWORD": "ex652322",
-#         "HOST": "localhost",
-#         "PORT": "5432",
-#     }
-# }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -181,4 +170,4 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split("
 
 # TODO whitelist
 # CORS_ORIGIN_WHITELIST = ["http://localhost:3000", "http://127.0.0.1:3000"]
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_ALLOW_ALL = True
