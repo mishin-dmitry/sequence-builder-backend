@@ -16,9 +16,6 @@ import sys
 import dj_database_url
 from corsheaders.defaults import default_headers, default_methods
 from django.core.management.utils import get_random_secret_key
-from dotenv import load_dotenv
-
-load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -85,6 +82,7 @@ DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+
 if DEVELOPMENT_MODE is True:
     DATABASES = {
         "default": {
@@ -92,6 +90,10 @@ if DEVELOPMENT_MODE is True:
             "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
         }
     }
+
+    from dotenv import load_dotenv
+
+    load_dotenv()
 elif len(sys.argv) > 0 and sys.argv[1] != "collectstatic":
     if os.getenv("DATABASE_URL", None) is None:
         raise Exception("DATABASE_URL environment variable not defined")
