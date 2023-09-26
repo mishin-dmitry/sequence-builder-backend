@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "django_filters",
-    "sequence_builder.sequence_builder.api.apps.ApiConfig",
-    "sequence_builder.sequence_builder.asana.apps.AsanaConfig",
+    "sequence_builder.api.apps.ApiConfig",
+    "sequence_builder.asana.apps.AsanaConfig",
     "corsheaders",
 ]
 
